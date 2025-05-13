@@ -69,3 +69,103 @@ Limited Access: Only the front element can be accessed or removed, no random acc
 Memory Overhead: Linked list queues use extra memory for pointers; array-based queues may waste space if not circular.
 Slow Search: Finding an element requires O(n) traversal, as queues are not designed for searching.
 */
+type QNode<T> = {
+  value: T;
+  next?: QNode<T>;
+};
+
+class Queue<T> {
+  public length: number;
+  private head?: QNode<T>;
+  private tail?: QNode<T>;
+
+  constructor() {
+    this.head = this.tail = undefined;
+    this.length = 0;
+  }
+
+  enqueue(item: T): void {
+    const node = { value: item } as QNode<T>;
+    this.length++;
+    if (!this.tail) {
+      this.tail = this.head = { value: item } as QNode<T>;
+    }
+
+    this.tail.next = node;
+    this.tail = node;
+  }
+
+  deque(): T | undefined {
+    if (!this.head) return undefined;
+
+    this.length--;
+    const head = this.head;
+    this.head = this.head.next;
+
+    //free
+    head.next = undefined;
+
+    return head.value;
+  }
+
+  peek(): T | undefined {
+    return this.head?.value;
+  }
+}
+
+/* Stacks
+A Stack is a linear data structure that follows the Last-In, First-Out (LIFO) principle. Elements are added (pushed) and removed (popped) from the top of the stack.
+
+Efficient LIFO Operations: Push and pop are O(1) operations.
+Dynamic Size: Can grow/shrink easily (with linked list or dynamic array implementation).
+Useful for Reversals: Ideal for tasks like reversing strings, parsing expressions, or managing function calls (call stack).
+
+Limited Access: Only the top element can be accessed or removed, no random access.
+Memory Overhead: Linked list stacks use extra memory for pointers; array-based stacks may waste space if not resized dynamically.
+Slow Search: Finding an element requires O(n) traversal, as stacks are not designed for searching.
+*/
+type SNode<T> = {
+  value: T;
+  prev?: SNode<T>;
+};
+
+class Stack<T> {
+  public length: number;
+  private head?: SNode<T>;
+
+  constructor() {
+    this.head = undefined;
+    this.length = 0;
+  }
+
+  push(item: T): void {
+    const node = { value: item } as SNode<T>;
+
+    if (!this.head) {
+      this.head = node;
+      return;
+    }
+
+    node.prev = this.head;
+    this.head = node;
+  }
+
+  pop(): T | undefined {
+    this.length = Math.max(0, this.length - 1);
+    if (this.length === 0) {
+      const head = this.head;
+      this.head = undefined;
+      return head?.value;
+    }
+
+    const head = this.head as SNode<T>;
+    this.head = head.prev;
+
+    return head.value;
+  }
+
+  peek(): T | undefined {
+    return this.head?.value;
+  }
+}
+
